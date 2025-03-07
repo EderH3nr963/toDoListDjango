@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static "css/form.css" %}">
+{% endblock head %}
+
+{% block main %}
+    <!-- From Uiverse.io by Smit-Prajapati --> 
+<div class="container">
+    <h1 class="title">Criar tarefa</h1>
+    <form class="form" method="POST">
+      {% csrf_token %}
+      <input required="" class="input" type="text" name="nomeTarefa" placeholder="Nome da tarefa" value="{{ tarefa.nomeTarefa }}">
+      <div class="">
+          <p style="margin: 0px">Data da tarefa</p>
+          <input required="" style="margin-top: 0px;" class="input" type="date" name="data" id="password" value="{{ dataTarefa }}">
+        </div>
+        <textarea required="" class="input" type="text" name="descricao" placeholder="Descricao" rows="4" cols="50">{{ tarefa.descricao }}</textarea>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="status" value="True" {% if tarefa.status %}checked{% endif %} id="flexCheckDefault">
+            <label class="form-check-label" for="flexCheckDefault">
+              Status da tarefa. Ex: Completada
+            </label>
+          </div>
+        <button href="#" class="button" style="--clr: #7808d0">
+        <span class="button__icon-wrapper">
+        <svg
+            viewBox="0 0 14 15"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            class="button__icon-svg"
+            width="10"
+        >
+            <path
+            d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z"
+            fill="currentColor"
+            ></path>
+        </svg>
+    
+        <svg
+            viewBox="0 0 14 15"
+            fill="none"
+            width="10"
+            xmlns="http://www.w3.org/2000/svg"
+            class="button__icon-svg button__icon-svg--copy"
+        >
+            <path
+            d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z"
+            fill="currentColor"
+            ></path>
+        </svg>
+        </span>
+        Atualizar
+    </button>
+      
+    </form>
+    </div>
+</div>
+{% endblock main %}

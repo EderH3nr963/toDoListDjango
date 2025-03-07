@@ -9,5 +9,3 @@ class Tarefa(models.Model):
     status = models.BooleanField(default=False)
     idUser = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     
-    
-    

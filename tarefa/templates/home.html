@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static "css/home.css" %}"/>
+{% endblock head %}
+
+{% block main %}
+<section>
+    <h1>Tarefas</h1>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Nome</th>
+          <th scope="col">Data</th>
+          <th scope="col">Descrição</th>
+          <th scope="col">Status</th>
+          <th scope="col">Atualizar</th>
+          <th scope="col">Excluir</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for tarefa in tarefaLista %}
+          <tr class="">
+            <td>{{ tarefa.nomeTarefa }}</td>
+            <td>{{ tarefa.dataTarefa }}</td>
+            <td>{{ tarefa.descricao }}</td>
+            <td>{% if tarefa.status %}Completada{% else %}Incompleta{% endif %}</td>
+            <td><a class="btn btn-primary" href="{% url "update" id=tarefa.id %}"><img width="10" height="10" src="{% static "images/pencil-fill.svg" %}"></a></td>
+            <td><a class="btn btn-danger" href="{% url "delete" id=tarefa.id %}"><img width="10" height="10" src="{% static "images/trash-fill.svg" %}"></a></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+</section>
+<a href="{% url "create" %}" class="float">
+  <img src="{% static "images/plus.svg" %}" class="my-float" height="50" width="50" />
+</a>
+{% endblock main %}

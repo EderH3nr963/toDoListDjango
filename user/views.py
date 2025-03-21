@@ -13,7 +13,6 @@ def login(request):
         request.POST.get('email'),
         request.POST.get('password'),
     ]
-    print(userData)
     
     # Autenticar o usuário
     userAuthenticate = authenticate(request, username=userData[0], password=userData[1])

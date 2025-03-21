@@ -2,12 +2,15 @@ from django.shortcuts import render, redirect
 from .models import Tarefa
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.auth import logout
 from datetime import datetime
 
 # View para a página inicial, com tarefas do usuário logado
 @login_required
 def home(request):
     # Filtra as tarefas com o id do usuário logado
+    logout(request)
+    
     tarefaLista = Tarefa.objects.filter(idUser=request.user)
     return render(request, 'home.html', {'tarefaLista': tarefaLista})
 

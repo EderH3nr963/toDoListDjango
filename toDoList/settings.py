@@ -27,6 +27,7 @@ SECRET_KEY = 'django-insecure-q6#(dj662vw$5wfv9*evm2@a7(o14*n$qc#$$n*v#m4cyf2joy
 DEBUG = False
 
 ALLOWED_HOSTS = ['todolistdjango-production.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://todolistdjango-production.up.railway.app']
 
 
 # Application definition

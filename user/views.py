@@ -66,9 +66,7 @@ def cadastro(request):
     
 def forgotPassword(request):
     # Obter o step atual da sessão ou definir como 1
-    current_step = request.session.get('forgot_password_step') if request.session.get('forgot_password_step') else 1
-    
-    print(current_step)
+    current_step = request.session.get('forgot_password_step', 1)
     
     if request.method == 'POST':
         if current_step == 1:
@@ -76,14 +74,14 @@ def forgotPassword(request):
             if form.is_valid():
                 email = form.cleaned_data['email']
                 user = CustomUser.objects.filter(email=email).first()
-                
+
                 if user:
                     # Gerar código de verificação
                     verification_code = ''.join([str(random.randint(0, 9)) for _ in range(6)])
                     user.reset_password_token = verification_code
                     user.reset_password_token_created = timezone.now()
                     user.save()
-                    
+
                     # Enviar email com o código
                     try:
                         send_mail(
@@ -100,13 +98,13 @@ def forgotPassword(request):
                         form.add_error(None, 'Erro ao enviar email. Tente novamente.')
                 else:
                     form.add_error('email', 'Email não encontrado.')
-        
+
         elif current_step == 2:
             form = ForgotPasswordStep2Form(request.POST)
             if form.is_valid():
                 verification_code = form.cleaned_data['verification_code']
                 email = request.session.get('user_email')
-                
+
                 if email:
                     user = CustomUser.objects.filter(email=email, reset_password_token=verification_code).first()
                     if user and timezone.now() - user.reset_password_token_created <= timedelta(minutes=15):
@@ -114,7 +112,7 @@ def forgotPassword(request):
                         return redirect('forgot_password')
                     else:
                         form.add_error('verification_code', 'Código inválido ou expirado.')
-        
+
         elif current_step == 3:
             form = ForgotPasswordStep3Form(request.POST)
             if form.is_valid():
@@ -126,62 +124,26 @@ def forgotPassword(request):
                         user.reset_password_token = None
                         user.reset_password_token_created = None
                         user.save()
-                        
+
                         # Limpar a sessão
                         del request.session['forgot_password_step']
                         del request.session['user_email']
                         return redirect('login')
-    
+
     # Renderizar o formulário apropriado baseado no step atual
-    if current_step == 1:
-        form = ForgotPasswordStep1Form()
-    elif current_step == 2:
-        form = ForgotPasswordStep2Form()
-    else:
-        form = ForgotPasswordStep3Form()
-    
-    print(form)
-    
+    if request.method == 'GET':
+        if current_step == 1:
+            form = ForgotPasswordStep1Form()
+        elif current_step == 2:
+            form = ForgotPasswordStep2Form()
+        else:
+            form = ForgotPasswordStep3Form()
+
     return render(request, 'resetPassword.html', {
         'form': form,
         'current_step': current_step,
         'total_steps': 3
     })
 
-def resetPassword(request, token):
-    if request.method == 'GET':
-        user = CustomUser.objects.filter(reset_password_token=token).first()
-        
-        if not user:
-            return render(request, 'resetPassword.html', {'error': 'Token inválido ou expirado'})
-        
-        # Verificar se o token não expirou (24 horas)
-        if timezone.now() - user.reset_password_token_created > timedelta(hours=24):
-            return render(request, 'resetPassword.html', {'error': 'Token expirado'})
-        
-        return render(request, 'resetPassword.html', {'token': token})
-    
-    elif request.method == 'POST':
-        user = CustomUser.objects.filter(reset_password_token=token).first()
-        
-        if not user:
-            return render(request, 'resetPassword.html', {'error': 'Token inválido ou expirado'})
-        
-        new_password = request.POST.get('new_password')
-        confirm_password = request.POST.get('confirm_password')
-        
-        if not new_password or not confirm_password:
-            return render(request, 'resetPassword.html', {'error': 'Preencha todos os campos'})
-        
-        if new_password != confirm_password:
-            return render(request, 'resetPassword.html', {'error': 'As senhas não coincidem'})
-        
-        # Atualizar senha
-        user.set_password(new_password)
-        user.reset_password_token = None
-        user.reset_password_token_created = None
-        user.save()
-        
-        return redirect('login')
-    
+
     

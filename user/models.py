@@ -30,6 +30,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):  # Inherit from Permission
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
+    reset_password_token = models.CharField(max_length=100, null=True, blank=True)
+    reset_password_token_created = models.DateTimeField(null=True, blank=True)
 
     objects = CustomUserManager()
 

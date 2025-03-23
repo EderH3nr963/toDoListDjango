@@ -9,8 +9,6 @@ from datetime import datetime
 @login_required
 def home(request):
     # Filtra as tarefas com o id do usuário logado
-    logout(request)
-    
     tarefaLista = Tarefa.objects.filter(idUser=request.user)
     return render(request, 'home.html', {'tarefaLista': tarefaLista})
 

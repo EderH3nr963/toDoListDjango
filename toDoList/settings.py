@@ -60,9 +60,7 @@ ROOT_URLCONF = 'toDoList.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            os.path.join(BASE_DIR, 'templates')    
-        ],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -139,14 +137,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'seu-email@gmail.com')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'sua-senha-de-app')
-DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER', 'seu-email@gmail.com')
-
-# Verificar se as configurações de email estão definidas
-if EMAIL_HOST_USER == 'seu-email@gmail.com' or EMAIL_HOST_PASSWORD == 'sua-senha-de-app':
-    print("AVISO: As configurações de email não foram definidas corretamente!")
-    print("Por favor, configure as variáveis de ambiente EMAIL_HOST_USER e EMAIL_HOST_PASSWORD")
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
 LOGIN_URL = '/user/login/'
 LOGIN_REDIRECT_URL = '/'

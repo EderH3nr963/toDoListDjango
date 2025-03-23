@@ -1,8 +1,9 @@
 from django.urls import path
-from .views import *
+from . import views
 
 urlpatterns = [
-    path('login/', login, name="login"),
-    path('cadastro/', cadastro, name="cadastro"),
-    path('forgotPassword/', forgotPassword, name="forgotPassword")
+    path('login/', views.login, name='login'),
+    path('cadastro/', views.cadastro, name='cadastro'),
+    path('forgot-password/', views.forgotPassword, name='forgot_password'),
+    path('reset-password/<str:token>/', views.resetPassword, name='reset_password'),
 ]
